@@ -13,18 +13,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
-    val movieData : MutableLiveData<List<Movie>> = MutableLiveData()
-    init {
+    val movieData: MutableLiveData<List<Movie>> = MutableLiveData()
+
+    fun start(search: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://www.omdbapi.com/")
             .addConverterFactory(GsonConverterFactory.create(Gson()))
             .build()
         val api = retrofit.create(OmdbAPI::class.java)
         viewModelScope.launch {
-        val result = api.getAllMovies("clown")
-          result.body()?.movies?.let {
-               movieData.postValue(it)
-           }
+            val result = api.getAllMovies(search)
+            result.body()?.movies?.let {
+                movieData.postValue(it)
+            }
         }
     }
 }

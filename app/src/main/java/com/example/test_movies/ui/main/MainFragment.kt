@@ -31,11 +31,16 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         recList?.layoutManager = LinearLayoutManager(requireContext())
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.movieData.observe(viewLifecycleOwner, Observer {
-            recList.adapter = MovieAdapter(it)
-        })
+       searchButton.setOnClickListener(){
+           viewModel.start(textInputEditText.text.toString())
+           viewModel.movieData.observe(viewLifecycleOwner, Observer {
+               recList.adapter = MovieAdapter(it)
+           })
+
+       }
 
 
     }
