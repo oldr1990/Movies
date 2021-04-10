@@ -1,16 +1,14 @@
 package com.example.test_movies.ui.main
 
-import android.icu.number.NumberFormatter.with
-import android.icu.number.NumberRangeFormatter.with
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test_movies.R
 import com.example.test_movies.da.Movie
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.list_item.view.*
 import kotlinx.android.synthetic.main.new_list.view.*
 
 class MovieAdapter(val data: List<Movie>): RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
@@ -25,7 +23,9 @@ class MovieAdapter(val data: List<Movie>): RecyclerView.Adapter<MovieAdapter.Vie
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
+        holder.item.cardView.setOnClickListener {
+           //onClickListener
+        }
         holder.item.titleText.text = data[position].name
         holder.item.yearText.text = "Год: ${data[position].year}"
         holder.item.typeText.text = "Тип: ${data[position].type}"
