@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Test_Movies</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="textview">TextView</string>
+    <string name="todo">TODO</string>
+</resources>
