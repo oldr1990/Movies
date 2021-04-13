@@ -44,5 +44,7 @@ class MainFragment : Fragment() {
 
 
     }
-
+    interface OnItemSelected{
+        fun itemTitle(text: String)
+    }
 }

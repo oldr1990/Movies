@@ -7,7 +7,9 @@ plugins {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-
+    androidExtensions {
+        experimental = true
+    }
     defaultConfig {
         applicationId "com.example.test_movies"
         minSdkVersion 21

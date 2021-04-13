@@ -1,47 +1,50 @@
 package com.example.test_movies.da
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class DetailsData(
     @SerializedName("Title")
-    val title: String,
+    val name: String = "no data",
     @SerializedName("Year")
-    val year: String,
+    val year: String = "no data",
     @SerializedName("Rated")
-    val rated: String,
+    val rated: String= "no data",
     @SerializedName("Released")
-    val released: String,
+    val released: String= "no data",
     @SerializedName("Runtime")
-    val runtime: String,
+    val runtime: String= "no data",
     @SerializedName("Genre")
-    val genre: String,
+    val type: String= "no data",
     @SerializedName("Director")
-    val director: String,
+    val director: String= "no data",
     @SerializedName("Writer")
-    val writer: String,
+    val writer: String= "no data",
     @SerializedName("Actors")
-    val actors: String,
+    val actors: String= "no data",
     @SerializedName("Plot")
-    val plot: String,
+    val plot: String= "no data",
     @SerializedName("Language")
-    val language: String,
+    val language: String= "no data",
     @SerializedName("Country")
-    val country: String,
+    val country: String= "no data",
     @SerializedName("Awards")
-    val awards: String,
+    val awards: String= "no data",
     @SerializedName("Poster")
-    val poster: String,
+    val imgURL: String= "no data",
     @SerializedName("Metascore")
-    val metascore: String,
+    val metascore: String= "no data",
     @SerializedName("imdbRating")
-    val imdbRating: String,
+    val imdbRating: String= "no data",
     @SerializedName("imdbVotes")
-    val imdbVotes: String,
+    val imdbVotes: String= "no data",
     @SerializedName("imdbID")
-    val imdbID: String,
+    val imdbID: String= "no data",
     @SerializedName("BoxOffice")
-    val cash: String,
+    val cash: String= "no data",
     @SerializedName("Production")
-    val Production: String,
+    val Production: String= "no data",
 
-)
+):Parcelable
