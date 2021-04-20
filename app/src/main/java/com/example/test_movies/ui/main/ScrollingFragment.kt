@@ -23,19 +23,16 @@ class ScrollingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-
-
-
         return inflater.inflate(R.layout.fragment_scrolling, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val movie: Movie = arguments?.getParcelable<Movie>("movie") as Movie
-        descriptionTitleTextView.text = movie.name
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var movie =  Movie()
+        // movie = arguments?.getParcelable<Movie>("My_movie")
+       // descriptionTitleTextView.setText("some_title")
     }
+
 
 
 }

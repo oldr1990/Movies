@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.test_movies.R
 import com.example.test_movies.da.Movie
@@ -31,14 +34,14 @@ class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
         holder.item.titleText.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val activity = v!!.context as AppCompatActivity
-                val scrollingFragment = ScrollingFragment()
+
                 val bundle =  Bundle()
-                bundle.putParcelable("movie",data[position])
-                scrollingFragment.arguments = bundle
-                scrollingFragment.textInputEditText
-                activity.supportFragmentManager.beginTransaction().replace(R.id.main,scrollingFragment).addToBackStack(null).commit()
+              //bundle.putParcelable("My_movie",data[position])
 
-
+                v.findNavController().navigate(R.id.blankFragment)
+             //   scrollingFragment.arguments = bundle
+              //  scrollingFragment.textInputEditText
+            //    activity.supportFragmentManager.beginTransaction().replace(R.id.main,scrollingFragment).addToBackStack(null).commit()
             }
         })
         holder.item.titleText.text = data[position].name

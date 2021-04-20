@@ -29,21 +29,21 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         recList?.layoutManager = LinearLayoutManager(requireContext())
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-       searchButton.setOnClickListener(){
-           viewModel.start(textInputEditText.text.toString())
-           viewModel.movieData.observe(viewLifecycleOwner, Observer {
-               recList.adapter = MovieAdapter(it)
-           })
+        searchButton.setOnClickListener(){
+            viewModel.start(textInputEditText.text.toString())
+            viewModel.movieData.observe(viewLifecycleOwner, Observer {
+                recList.adapter = MovieAdapter(it)
+            })
 
-       }
-
-
+        }
     }
+
     interface OnItemSelected{
         fun itemTitle(text: String)
     }
