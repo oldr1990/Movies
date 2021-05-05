@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewListItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -31,16 +32,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:elevation="20dp"
-                app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="10dp">
 
                 <ImageView
+                    android:transitionName="imageTransition"
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="7dp"
+                    android:layout_width="150dp"
+                    android:layout_height="225dp"
                     android:layout_weight="1"
-                    android:contentDescription="@string/todo"
                     tools:srcCompat="@tools:sample/avatars" />
             </androidx.cardview.widget.CardView>
 
@@ -51,6 +50,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/titleCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -61,7 +61,7 @@
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="9dp"
                     app:cardElevation="10dp"
-                    android:outlineSpotShadowColor="@android:color/holo_green_dark">
+                    >
 
                     <TextView
                         android:id="@+id/titleText"
@@ -76,6 +76,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/descriptionCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -91,12 +92,13 @@
                         android:layout_margin="5dp"
                         android:elevation="10dp"
                         android:text="@string/description"
-                        android:textColor="@color/purple_700"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/yearCard"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -111,9 +113,10 @@
                         android:layout_margin="5dp"
                         android:elevation="10dp"
                         android:text="@string/textview"
-                        android:textColor="@color/year"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 

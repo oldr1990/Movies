@@ -3,20 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/mainFragment2">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.test_movies.ui.main.MainFragment"
+        android:id="@+id/mainFragment2"
+        android:name="com.example.mymovies.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/main_fragment" >
         <action
-            android:id="@+id/action_mainFragment_to_blankFragment"
-            app:destination="@id/blankFragment" />
+            android:id="@+id/action_mainFragment2_to_detailFragment2"
+            app:destination="@id/detailFragment2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
-        android:id="@+id/blankFragment"
-        android:name="com.example.test_movies.BlankFragment"
-        android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" />
+        android:id="@+id/detailFragment2"
+        android:name="com.example.mymovies.DetailFragment"
+        android:label="detail_fragment"
+        tools:layout="@layout/detail_fragment" >
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="Default" />
+        <argument
+            android:name="colorBackground"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="colorText"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>
