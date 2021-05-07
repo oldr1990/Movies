@@ -9,6 +9,11 @@
     <string name="helper_text">На английском языке!</string>
     <string name="_label">Type:</string>
     <string name="year">Year:</string>
+    <string name="result_of_searching_label">Result of searching is:</string>
+    <string name="step_back"><![CDATA[<]]></string>
+    <string name="first_page"><![CDATA[<<]]></string>
+    <string name="step_forward"><![CDATA[>]]></string>
+    <string name="last_page"><![CDATA[>>]]></string>
     <string-array name="type">
         <item>All types</item>
         <item>Movie</item>

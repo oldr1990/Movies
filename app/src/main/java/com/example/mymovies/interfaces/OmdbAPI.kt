@@ -10,8 +10,9 @@ interface OmdbAPI {
     @GET("/")
     suspend fun getAllMovies(
         @Query("s") search: String,
-        @Query("page") page: Int,
+        @Query("page") page: Int?,
         @Query("type") type: String?,
+        @Query("y") year: String?,
         @Query("apikey") apiKey: String = "830086",
 
     ): Response<MovieResponse>
