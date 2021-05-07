@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymovies.interfaces.OmdbAPI
 import com.example.test_movies.da.Movie
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,20 +20,26 @@ class MainViewModel : ViewModel() {
     var currentYear: String? = null
 
     fun getData(search: String, year: String, typeSelected: String, page: Int = 1) {
+        if (response.value != "False") response.value = "False"
         val retrofit = Retrofit.Builder()
             .baseUrl("http://www.omdbapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val api = retrofit.create(OmdbAPI::class.java)
-        viewModelScope.launch {
+
+        Log.e("!@#", "GetData  was called")
+        viewModelScope.launch{
             var type: String? = typeSelected.toLowerCase()
             if (type == "all types") type = null
             currentYear = year
             val result = api.getAllMovies(search, page, type, year)
             result?.body()?.let {
-                numberOfResult.postValue(it.totalResult)
-                movieData.postValue(it.movies)
-                response.postValue(it.Response)
+                Log.e("!@#", "ModelView result called")
+                if (it.Response == "True") {
+                    response.postValue(it.Response)
+                    numberOfResult.postValue(it.totalResult)
+                    movieData.postValue(it.movies)
+                }
             }
         }
     }

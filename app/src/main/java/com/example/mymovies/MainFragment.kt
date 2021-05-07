@@ -14,10 +14,14 @@ import android.view.animation.Animation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.AnyRes
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.new_list.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -40,24 +44,27 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        spinnerSetup()
         updateUI()
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
 
         search_button.setOnClickListener {
+            viewModel.currentPage = 1
             requestData()
         }
     }
-
-    private fun requestData() {                                                                          //Запрашивает данные с сервера, в случае успуха выводит
-        GlobalScope.launch {
+    //Запрашивает данные с сервера, в случае успуха выводит
+    private fun requestData() {
+        Log.e("!@#", "requestData was called")
+        viewModel.response.removeObservers(LifecycleOwner {  })
             viewModel.getData(
                 input_text.text.toString(),
                 editTextYear.text.toString(),
                 search_type_spinner.selectedItem.toString(),
                 viewModel.currentPage
             )
-        }
         viewModel.response.observe(viewLifecycleOwner, {
+            Log.e("!@#", "response  $it")
             if (it == "True") {
                 spinnerSetup()
                 updateUI()
@@ -94,7 +101,6 @@ class MainFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
-        spinnerSetup()
         viewModel.numberOfResult.observe(viewLifecycleOwner, {
             if (it != null && it != 0) {
                 val pages = when (it % 10) {
@@ -108,6 +114,7 @@ class MainFragment : Fragment() {
                 bottomNavigation(viewModel.currentPage, pages)
             }
         })
+        Log.e("!@#" , "updateUI was called!")
         viewModel.movieData.observe(viewLifecycleOwner, {
             it?.let { recyclerview.adapter = MovieAdapter(it) }
         })
@@ -116,8 +123,8 @@ class MainFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun bottomNavigation(currentPage: Int, pages: Int) {
-        textViewPageNavigation.text = "$currentPage/$pages pages"
         if (pages >= 2) {
+            textViewPageNavigation.text = "$currentPage/$pages pages"
             cardViewBottomNavigation.visibility = CardView.VISIBLE
             if (currentPage > 1) {
                 pageFirstPageNavigation.setTextColor(Color.BLACK)
@@ -154,6 +161,7 @@ class MainFragment : Fragment() {
                 pageLastPageNavigation.isClickable = false
             }
         }
+        else cardViewBottomNavigation.visibility = CardView.GONE
 
 
     }

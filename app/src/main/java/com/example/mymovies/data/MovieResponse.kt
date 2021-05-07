@@ -8,5 +8,5 @@ data class MovieResponse(
     @SerializedName("totalResults")
     val totalResult: Int,
     @SerializedName("Response")
-    val Response: String
+    val Response: String,
 )
