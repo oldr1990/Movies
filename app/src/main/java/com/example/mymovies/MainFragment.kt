@@ -19,6 +19,9 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.size.Scale
+import com.example.mymovies.animations.WaitingAnimation
 import kotlinx.android.synthetic.main.main_fragment.*
 
 class MainFragment : Fragment() {
@@ -26,6 +29,7 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    private lateinit var waitingAnimation: WaitingAnimation
     private lateinit var viewModel: MainViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,9 +40,13 @@ class MainFragment : Fragment() {
 
     @SuppressLint("ResourceType", "SetTextI18n", "ShowToast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-
         super.onActivityCreated(savedInstanceState)
+        backgroundImageMain.load(R.drawable.movie_searcher_background){
+
+            scale(Scale.FILL)
+        }
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        waitingAnimation = WaitingAnimation(imageViewWaiting,cardViewWaitingAnimation)
         spinnerSetup()
         updateUI()
         viewModel.errorMessage.observe(viewLifecycleOwner, {
@@ -48,14 +56,16 @@ class MainFragment : Fragment() {
                     "Internet connection is failed. Please check it.",
                     Toast.LENGTH_SHORT
                 ).show()
-                turnOnUI()
+                updateUI()
             }
+
         })
         viewModel.wrongRequest.observe(viewLifecycleOwner, {
             if (it == true) {
                 viewModel.currentPage = 1
                 viewModel.currentYear = ""
                 viewModel.currentType = 0
+                viewModel.numberOfResult.postValue(1)
                 input_text.setText("")
                 editTextYear.setText("")
                 search_type_spinner.setSelection(0)
@@ -64,7 +74,7 @@ class MainFragment : Fragment() {
                     "Your request is wrong. Please check it.",
                     Toast.LENGTH_SHORT
                 ).show()
-                turnOnUI()
+                updateUI()
             }
         })
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
@@ -76,14 +86,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun waitingAnimation() {
-        cardViewWaitingAnimation.visibility = CardView.VISIBLE
-        val anim = ObjectAnimator.ofFloat(imageViewWaiting, View.ROTATION, -360F, 0f)
-        anim.duration = 1000
-        anim.repeatCount = ValueAnimator.INFINITE
-        anim.start()
-        imageViewWaiting
-    }
 
     private fun disablingUI() {
         search_button.isClickable = false
@@ -91,17 +93,10 @@ class MainFragment : Fragment() {
         cardViewBackPageNavigation.isClickable = false
         cardViewNextPageNavigation.isClickable = false
         cardViewFirstPageNavigation.isClickable = false
-        waitingAnimation()
+        waitingAnimation.turnOnAnimation()
+
     }
 
-    private fun turnOnUI() {
-        search_button.isClickable = true
-        cardViewLastPageNavigation.isClickable = true
-        cardViewBackPageNavigation.isClickable = true
-        cardViewNextPageNavigation.isClickable = true
-        cardViewFirstPageNavigation.isClickable = true
-        cardViewWaitingAnimation.visibility = CardView.GONE
-    }
 
     //Запрашивает данные с сервера
     private fun requestData() {
@@ -143,6 +138,8 @@ class MainFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
+        waitingAnimation.turnOffAnimation()
+        search_button.isClickable = true
         viewModel.numberOfResult.observe(viewLifecycleOwner, {
             if (it != null && it != 0) {
                 val pages = when (it % 10) {
@@ -160,10 +157,9 @@ class MainFragment : Fragment() {
         viewModel.movieData.observe(viewLifecycleOwner, {
             it?.let {
                 recyclerview.adapter = MovieAdapter(it)
-                turnOnUI()
+                waitingAnimation.turnOffAnimation()
             }
         })
-
     }
 
     @SuppressLint("SetTextI18n")

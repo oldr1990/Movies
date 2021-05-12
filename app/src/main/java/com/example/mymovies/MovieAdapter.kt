@@ -30,7 +30,6 @@ class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         holder.itemView.titleText.text = data[position].name
         holder.itemView.yearText.text = "Год: ${data[position].year}"
         holder.itemView.typeText.text = "Тип: ${data[position].type}"
@@ -39,13 +38,11 @@ class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
             holder.itemView.cardViewListItem.setCardBackgroundColor(
                 data[position].colorBackground
             )
-
         }
         if (data[position].colorText != 0) {
             holder.itemView.titleText.setTextColor(data[position].colorText)
             holder.itemView.typeText.setTextColor(data[position].colorText)
             holder.itemView.yearText.setTextColor(data[position].colorText)
-
         }
         val job = GlobalScope.launch {
             holder.itemView.imageView.load(data[position].imgURL) {

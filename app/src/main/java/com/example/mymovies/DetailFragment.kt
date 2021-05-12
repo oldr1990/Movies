@@ -22,6 +22,7 @@ import coil.load
 import coil.size.Scale
 import coil.size.Size
 import coil.transform.Transformation
+import com.example.mymovies.animations.WaitingAnimation
 import com.example.mymovies.databinding.DetailFragmentBinding
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.coroutines.*
@@ -44,7 +45,6 @@ class DetailFragment : Fragment() {
             inflater,
             R.layout.detail_fragment, container, false
         )
-
         return binding.root
     }
 
@@ -64,9 +64,12 @@ class DetailFragment : Fragment() {
         val request = GlobalScope.launch {
             viewModel.getData(arguments?.getString("title").toString())
         }
+        val waitingAnimation = WaitingAnimation(imageViewWaitingDetails, cardViewWaitingAnimationDetails)
+        waitingAnimation.turnOnAnimation()
         runBlocking {
             request.join()
         }
+        waitingAnimation.turnOffAnimation()
         Log.e("!@#", "after connetcion checking")
         ratingRecycler?.layoutManager = LinearLayoutManager(requireContext())
         ratingRecycler.adapter = RatingAdapter(viewModel.movieDetails.ratings)
@@ -78,29 +81,6 @@ class DetailFragment : Fragment() {
             viewModel.movieDetails.colorText = arguments?.getInt("colorText")!!
         } else viewModel.movieDetails.colorText = Color.BLACK
         binding.movie = viewModel.movieDetails
-        GlobalScope.launch {
-            poster.load(viewModel.movieDetails.imgURL) {
-                error(R.drawable.sorry_no_image_availble)
-                scale(Scale.FILL)
-                transformations(object : Transformation {
-                    override fun key(): String = "paletteTransformer"
-                    override suspend fun transform(
-                        pool: BitmapPool,
-                        input: Bitmap,
-                        size: Size
-                    ): Bitmap {
-                        val p = Palette.from(input).generate()
-                        if (p.vibrantSwatch != null) viewModel.movieDetails.colorBackground =
-                            p.vibrantSwatch!!.rgb
-                        if (p.darkVibrantSwatch != null) viewModel.movieDetails.colorText =
-                            p.darkVibrantSwatch!!.rgb
-                        binding.movie = viewModel.movieDetails
-                        return input
-                    }
-                })
-            }
-        }
-
-
+        poster.load(viewModel.movieDetails.imgURL)
     }
 }
