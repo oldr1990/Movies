@@ -1,7 +1,8 @@
 package com.example.mymovies
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,20 +12,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.AnyRes
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.new_list.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MainFragment : Fragment() {
     companion object {
@@ -41,35 +36,82 @@ class MainFragment : Fragment() {
 
     @SuppressLint("ResourceType", "SetTextI18n", "ShowToast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
+        super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         spinnerSetup()
         updateUI()
+        viewModel.errorMessage.observe(viewLifecycleOwner, {
+            if (it == false) {
+                Toast.makeText(
+                    view?.context,
+                    "Internet connection is failed. Please check it.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                turnOnUI()
+            }
+        })
+        viewModel.wrongRequest.observe(viewLifecycleOwner, {
+            if (it == true) {
+                viewModel.currentPage = 1
+                viewModel.currentYear = ""
+                viewModel.currentType = 0
+                input_text.setText("")
+                editTextYear.setText("")
+                search_type_spinner.setSelection(0)
+                Toast.makeText(
+                    view?.context,
+                    "Your request is wrong. Please check it.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                turnOnUI()
+            }
+        })
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-
         search_button.setOnClickListener {
             viewModel.currentPage = 1
             requestData()
+            disablingUI()
+
         }
     }
-    //Запрашивает данные с сервера, в случае успуха выводит
+
+    private fun waitingAnimation() {
+        cardViewWaitingAnimation.visibility = CardView.VISIBLE
+        val anim = ObjectAnimator.ofFloat(imageViewWaiting, View.ROTATION, -360F, 0f)
+        anim.duration = 1000
+        anim.repeatCount = ValueAnimator.INFINITE
+        anim.start()
+        imageViewWaiting
+    }
+
+    private fun disablingUI() {
+        search_button.isClickable = false
+        cardViewLastPageNavigation.isClickable = false
+        cardViewBackPageNavigation.isClickable = false
+        cardViewNextPageNavigation.isClickable = false
+        cardViewFirstPageNavigation.isClickable = false
+        waitingAnimation()
+    }
+
+    private fun turnOnUI() {
+        search_button.isClickable = true
+        cardViewLastPageNavigation.isClickable = true
+        cardViewBackPageNavigation.isClickable = true
+        cardViewNextPageNavigation.isClickable = true
+        cardViewFirstPageNavigation.isClickable = true
+        cardViewWaitingAnimation.visibility = CardView.GONE
+    }
+
+    //Запрашивает данные с сервера
     private fun requestData() {
         Log.e("!@#", "requestData was called")
-        viewModel.response.removeObservers(LifecycleOwner {  })
-            viewModel.getData(
-                input_text.text.toString(),
-                editTextYear.text.toString(),
-                search_type_spinner.selectedItem.toString(),
-                viewModel.currentPage
-            )
-        viewModel.response.observe(viewLifecycleOwner, {
-            Log.e("!@#", "response  $it")
-            if (it == "True") {
-                spinnerSetup()
-                updateUI()
-            }
-        })
+        viewModel.getData(
+            input_text.text.toString(),
+            editTextYear.text.toString(),
+            search_type_spinner.selectedItem.toString(),
+            viewModel.currentPage
+        )
     }
 
     private fun spinnerSetup() {
@@ -114,9 +156,12 @@ class MainFragment : Fragment() {
                 bottomNavigation(viewModel.currentPage, pages)
             }
         })
-        Log.e("!@#" , "updateUI was called!")
+        Log.e("!@#", "updateUI was called!")
         viewModel.movieData.observe(viewLifecycleOwner, {
-            it?.let { recyclerview.adapter = MovieAdapter(it) }
+            it?.let {
+                recyclerview.adapter = MovieAdapter(it)
+                turnOnUI()
+            }
         })
 
     }
@@ -129,39 +174,42 @@ class MainFragment : Fragment() {
             if (currentPage > 1) {
                 pageFirstPageNavigation.setTextColor(Color.BLACK)
                 pageBackNavigation.setTextColor(Color.BLACK)
-                pageFirstPageNavigation.setOnClickListener {
+                cardViewFirstPageNavigation.setOnClickListener {
                     viewModel.currentPage = 1
                     requestData()
+                    disablingUI()
                 }
-                pageBackNavigation.setOnClickListener {
+                cardViewBackPageNavigation.setOnClickListener {
                     viewModel.currentPage--
                     requestData()
+                    disablingUI()
                 }
             } else {
-                pageFirstPageNavigation.setTextColor(Color.LTGRAY)
-                pageBackNavigation.setTextColor(Color.LTGRAY)
-                pageBackNavigation.isClickable = false
-                pageFirstPageNavigation.isClickable = false
+                pageFirstPageNavigation.setTextColor(Color.GRAY)
+                pageBackNavigation.setTextColor(Color.GRAY)
+                cardViewBackPageNavigation.isClickable = false
+                cardViewFirstPageNavigation.isClickable = false
             }
             if (currentPage < pages) {
                 pageNextPageNavigation.setTextColor(Color.BLACK)
                 pageLastPageNavigation.setTextColor(Color.BLACK)
-                pageNextPageNavigation.setOnClickListener {
+                cardViewNextPageNavigation.setOnClickListener {
                     viewModel.currentPage++
                     requestData()
+                    disablingUI()
                 }
-                pageLastPageNavigation.setOnClickListener {
+                cardViewLastPageNavigation.setOnClickListener {
                     viewModel.currentPage = pages
                     requestData()
+                    disablingUI()
                 }
             } else {
-                pageNextPageNavigation.setTextColor(Color.LTGRAY)
-                pageLastPageNavigation.setTextColor(Color.LTGRAY)
-                pageNextPageNavigation.isClickable = false
-                pageLastPageNavigation.isClickable = false
+                pageNextPageNavigation.setTextColor(Color.GRAY)
+                pageLastPageNavigation.setTextColor(Color.GRAY)
+                cardViewLastPageNavigation.isClickable = false
+                cardViewNextPageNavigation.isClickable = false
             }
-        }
-        else cardViewBottomNavigation.visibility = CardView.GONE
+        } else cardViewBottomNavigation.visibility = CardView.GONE
 
 
     }

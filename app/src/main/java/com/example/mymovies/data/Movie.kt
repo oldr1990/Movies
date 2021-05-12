@@ -2,11 +2,8 @@ package com.example.test_movies.da
 
 
 import android.os.Parcelable
-import androidx.palette.graphics.Palette
-import com.example.mymovies.data.MovieSwatch
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.parcel.RawValue
 
 @Parcelize
 data class Movie(

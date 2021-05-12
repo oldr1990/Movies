@@ -1,19 +1,11 @@
 package com.example.mymovies
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.constraintlayout.widget.Placeholder
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.ViewCompat
-import androidx.core.view.drawToBitmap
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.palette.graphics.Palette
@@ -22,22 +14,12 @@ import coil.bitmap.BitmapPool
 import coil.load
 import coil.size.Scale
 import coil.size.Size
-import coil.transform.RoundedCornersTransformation
 import coil.transform.Transformation
-import com.example.mymovies.data.MovieSwatch
 import com.example.test_movies.da.Movie
-import com.google.android.material.shape.CutCornerTreatment
-import com.google.android.material.shape.RoundedCornerTreatment
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
-import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.new_list.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
-import kotlin.annotation.Target as Target1
 
 class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}

@@ -9,4 +9,6 @@ data class MovieResponse(
     val totalResult: Int,
     @SerializedName("Response")
     val Response: String,
+    @SerializedName("Error")
+    val Error: String
 )

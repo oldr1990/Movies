@@ -1,5 +1,6 @@
 package com.example.mymovies
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
@@ -9,7 +10,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.TransitionInflater
@@ -21,6 +25,7 @@ import coil.transform.Transformation
 import com.example.mymovies.databinding.DetailFragmentBinding
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.coroutines.*
+import java.net.UnknownHostException
 
 class DetailFragment : Fragment() {
 
@@ -45,22 +50,27 @@ class DetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
     }
 
+    @SuppressLint("ResourceType")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        viewModel.isFailed.observe(viewLifecycleOwner, {
+            if (it == true) findNavController().popBackStack()
+        })
         val request = GlobalScope.launch {
             viewModel.getData(arguments?.getString("title").toString())
         }
         runBlocking {
             request.join()
         }
+        Log.e("!@#", "after connetcion checking")
         ratingRecycler?.layoutManager = LinearLayoutManager(requireContext())
         ratingRecycler.adapter = RatingAdapter(viewModel.movieDetails.ratings)
-       Log.e("!@#", viewModel.movieDetails.ratings.toString())
-
+        Log.e("!@#", viewModel.movieDetails.ratings.toString())
         if (arguments?.getInt("colorBackground") != 0) {
             viewModel.movieDetails.colorBackground = arguments?.getInt("colorBackground")!!
         } else viewModel.movieDetails.colorBackground = Color.GRAY
@@ -90,5 +100,7 @@ class DetailFragment : Fragment() {
                 })
             }
         }
+
+
     }
 }
