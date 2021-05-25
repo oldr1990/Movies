@@ -41,8 +41,7 @@ class MainFragment : Fragment() {
     @SuppressLint("ResourceType", "SetTextI18n", "ShowToast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        backgroundImageMain.load(R.drawable.movie_searcher_background){
-
+        backgroundImageMain.load(R.drawable.movie_info_searcher){
             scale(Scale.FILL)
         }
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -138,6 +137,7 @@ class MainFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
+        Log.e("!@#", "Update UI!")
         waitingAnimation.turnOffAnimation()
         search_button.isClickable = true
         viewModel.numberOfResult.observe(viewLifecycleOwner, {
@@ -158,6 +158,7 @@ class MainFragment : Fragment() {
             it?.let {
                 recyclerview.adapter = MovieAdapter(it)
                 waitingAnimation.turnOffAnimation()
+                search_button.isClickable = true
             }
         })
     }

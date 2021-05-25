@@ -16,6 +16,7 @@ import coil.size.Scale
 import coil.size.Size
 import coil.transform.Transformation
 import com.example.test_movies.da.Movie
+import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.new_list.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,7 +24,6 @@ import kotlinx.coroutines.runBlocking
 
 class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val textView = LayoutInflater.from(parent.context).inflate(R.layout.new_list, parent, false)
         return ViewHolder(textView)

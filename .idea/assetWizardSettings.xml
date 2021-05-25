@@ -332,9 +332,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffac1b" />
-                            <entry key="outputName" value="ic_baseline_star_rate_24" />
-                            <entry key="sourceFile" value="C:\Users\Alexandr\Documents\GitHub" />
+                            <entry key="outputName" value="ic_icon" />
+                            <entry key="sourceFile" value="C:\Users\Alexandr\Desktop\icon.psd" />
                           </map>
                         </option>
                       </PersistentState>
