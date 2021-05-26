@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Movies</string>
+    <string name="app_name">Movie Info Searcher</string>
     <string name="search">Поиск</string>
     <string name="search_eng">search</string>
     <string name="title">Title</string>
