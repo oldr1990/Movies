@@ -26,7 +26,8 @@ class DetailViewModel : ViewModel() {
                    movieDetails = it
                 isFailed.postValue(false)
             }
-        } catch (e: UnknownHostException) { 					//ловим отсутсвие интернета
+        } catch (e: UnknownHostException) {
+			//ловим отсутсвие интернета
             isFailed.postValue(true)
         }
     }

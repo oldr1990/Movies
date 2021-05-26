@@ -47,8 +47,10 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java) 
         waitingAnimation = WaitingAnimation(imageViewWaiting,cardViewWaitingAnimation)	
         spinnerSetup()																	
-        updateUI()																		
-        viewModel.errorMessage.observe(viewLifecycleOwner, {							//обработчик ошибки: нет интернета
+        updateUI()
+		
+		//обработчик ошибки: нет интернета
+        viewModel.errorMessage.observe(viewLifecycleOwner, {							
             if (it == false) {
                 Toast.makeText(
                     view?.context,
@@ -59,7 +61,9 @@ class MainFragment : Fragment() {
             }
 
         })
-        viewModel.wrongRequest.observe(viewLifecycleOwner, {							//обработчик ошибки запроса
+		
+		//обработчик ошибки запроса
+        viewModel.wrongRequest.observe(viewLifecycleOwner, {							
             if (it == true) {
                 viewModel.currentPage = 1
                 viewModel.currentYear = ""
@@ -76,8 +80,10 @@ class MainFragment : Fragment() {
                 updateUI()
             }
         })
+		
+		//слушатель кнопки поиск
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-        search_button.setOnClickListener {												//слушатель кнопки поиск
+        search_button.setOnClickListener {												
             viewModel.currentPage = 1
             requestData()
             disablingUI()
