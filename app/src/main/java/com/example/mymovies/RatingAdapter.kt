@@ -16,9 +16,11 @@ import kotlinx.android.synthetic.main.rating_list_item_metacritic.view.*
 import kotlinx.android.synthetic.main.rating_list_item_rootten.view.*
 import kotlinx.android.synthetic.main.rating_list_item_rootten.view.imageRatingItemRT
 
+//Адаптер для списка рейтингов, для каждого типа рейтинга свой лейаут
 class RatingAdapter(private val ratings: List<Ratings>) : RecyclerView.Adapter<RatingAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
-
+	
+	//устанавливаем тип в зависимости от источника
     override fun getItemViewType(position: Int): Int {
         when(ratings[position].source){
             "Metacritic" -> return 0
@@ -28,7 +30,9 @@ class RatingAdapter(private val ratings: List<Ratings>) : RecyclerView.Adapter<R
         }
          return 1
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    
+	//возвращаем нужный лейаут в зависимости от типа
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         when (viewType){
             0-> return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rating_list_item_metacritic,parent , false))
             1-> return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rating_list_item_rootten,parent , false))

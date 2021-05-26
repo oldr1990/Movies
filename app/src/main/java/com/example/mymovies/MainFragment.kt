@@ -37,18 +37,18 @@ class MainFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
-
+	
     @SuppressLint("ResourceType", "SetTextI18n", "ShowToast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         backgroundImageMain.load(R.drawable.movie_info_searcher){
             scale(Scale.FILL)
         }
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        waitingAnimation = WaitingAnimation(imageViewWaiting,cardViewWaitingAnimation)
-        spinnerSetup()
-        updateUI()
-        viewModel.errorMessage.observe(viewLifecycleOwner, {
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java) 
+        waitingAnimation = WaitingAnimation(imageViewWaiting,cardViewWaitingAnimation)	
+        spinnerSetup()																	
+        updateUI()																		
+        viewModel.errorMessage.observe(viewLifecycleOwner, {							//обработчик ошибки: нет интернета
             if (it == false) {
                 Toast.makeText(
                     view?.context,
@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
             }
 
         })
-        viewModel.wrongRequest.observe(viewLifecycleOwner, {
+        viewModel.wrongRequest.observe(viewLifecycleOwner, {							//обработчик ошибки запроса
             if (it == true) {
                 viewModel.currentPage = 1
                 viewModel.currentYear = ""
@@ -77,7 +77,7 @@ class MainFragment : Fragment() {
             }
         })
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-        search_button.setOnClickListener {
+        search_button.setOnClickListener {												//слушатель кнопки поиск
             viewModel.currentPage = 1
             requestData()
             disablingUI()
@@ -85,8 +85,8 @@ class MainFragment : Fragment() {
         }
     }
 
-
-    private fun disablingUI() {
+//выключает интерфейс
+    private fun disablingUI() {			
         search_button.isClickable = false
         cardViewLastPageNavigation.isClickable = false
         cardViewBackPageNavigation.isClickable = false
@@ -107,7 +107,7 @@ class MainFragment : Fragment() {
             viewModel.currentPage
         )
     }
-
+//выпадающий список фильтра типа
     private fun spinnerSetup() {
         viewModel?.currentYear?.let {
             editTextYear.setText(it)
@@ -134,7 +134,8 @@ class MainFragment : Fragment() {
                 }
         }
     }
-
+	
+	//обновляем интерфейс
     @SuppressLint("SetTextI18n")
     private fun updateUI() {
         Log.e("!@#", "Update UI!")
@@ -162,7 +163,7 @@ class MainFragment : Fragment() {
             }
         })
     }
-
+	//вывод постраничной навигации вызывается только из UpdateUI()
     @SuppressLint("SetTextI18n")
     private fun bottomNavigation(currentPage: Int, pages: Int) {
         if (pages >= 2) {

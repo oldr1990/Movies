@@ -66,7 +66,8 @@ class DetailFragment : Fragment() {
         }
         val waitingAnimation = WaitingAnimation(imageViewWaitingDetails, cardViewWaitingAnimationDetails)
         waitingAnimation.turnOnAnimation()
-        runBlocking {
+		//ожидаем данных с сервера
+		runBlocking {
             request.join()
         }
         waitingAnimation.turnOffAnimation()

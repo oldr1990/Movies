@@ -44,6 +44,8 @@ class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
             holder.itemView.typeText.setTextColor(data[position].colorText)
             holder.itemView.yearText.setTextColor(data[position].colorText)
         }
+		
+		//загружаем постер и определяем цвета
         val job = GlobalScope.launch {
             holder.itemView.imageView.load(data[position].imgURL) {
                 error(R.drawable.sorry_no_image_availble)
@@ -80,6 +82,8 @@ class MovieAdapter(val data: List<Movie>) : RecyclerView.Adapter<MovieAdapter.Vi
                 })
             }
         }
+		
+		//ждем загрузки постера и определения цвета
         runBlocking { job.join() }
 
 

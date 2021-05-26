@@ -45,7 +45,7 @@ class MainViewModel : ViewModel() {
                     }
                     else wrongRequest.postValue(true)
                 }
-            } catch (e: UnknownHostException) {
+            } catch (e: UnknownHostException) {								//ловим отсутсвие интернета
                 errorMessage.postValue(false)
             }
         }

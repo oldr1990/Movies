@@ -7,7 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface OmdbAPI {
-    @GET("/")
+    
+	//поиск фильмов/сериалов
+	@GET("/")
     suspend fun getAllMovies(
         @Query("s") search: String,
         @Query("page") page: Int?,
@@ -16,6 +18,8 @@ interface OmdbAPI {
         @Query("apikey") apiKey: String = "830086",
 
     ): Response<MovieResponse>
+	
+	//запрос детальной информации о фильме/сериале
     @GET("/")
     suspend fun getMovie(
         @Query("i") search: String,
