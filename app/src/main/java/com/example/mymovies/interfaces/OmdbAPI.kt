@@ -16,12 +16,11 @@ interface OmdbAPI {
         @Query("type") type: String?,
         @Query("y") year: String?,
         @Query("apikey") apiKey: String = "830086",
-
     ): Response<MovieResponse>
 	
 	//запрос детальной информации о фильме/сериале
     @GET("/")
-    suspend fun getMovie(
+    suspend fun getMovieDetails(
         @Query("i") search: String,
         @Query("apikey") apiKey: String = "830086"
     ):Response<DetailsData>

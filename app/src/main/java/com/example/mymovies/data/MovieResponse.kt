@@ -10,5 +10,5 @@ data class MovieResponse(
     @SerializedName("Response")
     val Response: String,
     @SerializedName("Error")
-    val Error: String
+    val Error: String?
 )
