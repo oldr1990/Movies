@@ -30,10 +30,8 @@ class DefaultRepository @Inject constructor(
 
     override suspend fun getMovie(id: String): Resource<DetailsData> {
         return try {
-            Log.e("!@#","Repository befor")
             val response = api.getMovieDetails(id)
             val result = response.body()
-
             Log.e("!@#","SearchViewModel befor if")
             if (response.isSuccessful && result != null) {
                 return Resource.Success(result)

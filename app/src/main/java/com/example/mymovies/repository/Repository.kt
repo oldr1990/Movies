@@ -7,6 +7,6 @@ import com.example.test_movies.da.MovieResponse
 import retrofit2.http.Query
 
 interface Repository {
-    suspend fun searchMovies( search: Search,):Resource<MovieResponse>
+    suspend fun searchMovies( search: Search):Resource<MovieResponse>
     suspend fun getMovie(id: String):Resource<DetailsData>
 }

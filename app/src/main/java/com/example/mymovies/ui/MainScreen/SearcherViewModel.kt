@@ -1,10 +1,8 @@
 package com.example.mymovies.ui.MainScreen
 
-import android.util.Log
+
 import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mymovies.data.Constants.EMPTY_STRING
@@ -17,7 +15,6 @@ import com.example.test_movies.da.MovieResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class SearcherViewModel @ViewModelInject constructor(
     private val repository: Repository,
@@ -26,7 +23,7 @@ class SearcherViewModel @ViewModelInject constructor(
 
     private val _searchResponse = MutableStateFlow<SearchEvent>(SearchEvent.Empty)
     val searchResponse: StateFlow<SearchEvent> = _searchResponse
-
+    var page = 0
     var searchSetup = Search(EMPTY_STRING)
     var spinnerPosition = 0
     var isLoading = View.GONE
@@ -44,16 +41,12 @@ class SearcherViewModel @ViewModelInject constructor(
     ) {
         viewModelScope.launch(dispatcher.io) {
             _searchResponse.value = SearchEvent.Loading
-            Log.e("!@#", "SearchViewModel befor when")
             val response = repository.searchMovies(search)
-
             when (response) {
                 is Resource.Error -> {
-                    Log.e("!@#", "SearchViewModel ERROR: ${response.toString()}")
                     _searchResponse.value = SearchEvent.Failure(response.message.toString())
                 }
                 is Resource.Success -> {
-                    Log.e("!@#", "SearchViewModel success")
                     if (response.data?.Response.toBoolean()) {
                         response.data?.let {
                             _searchResponse.value = SearchEvent.Success(response.data)

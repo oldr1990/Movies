@@ -1,34 +1,46 @@
 package com.example.mymovies.ui.DetailScreen
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
+
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import com.example.mymovies.interfaces.OmdbAPI
+import androidx.lifecycle.viewModelScope
+import com.example.mymovies.repository.Repository
+import com.example.mymovies.util.DispatcherProvider
+import com.example.mymovies.util.Resource
 import com.example.test_movies.da.DetailsData
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.net.UnknownHostException
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class DetailViewModel : ViewModel() {
-    var isFailed: MutableLiveData<Boolean> = MutableLiveData()
-    var movieDetails: DetailsData = DetailsData()
 
-    suspend fun getData(id: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://www.omdbapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val api = retrofit.create(OmdbAPI::class.java)
-        try {
-            val result = api.getMovieDetails(id)
-            result?.body()?.let {
-                   Log.e("!@#", it.toString())
-                   movieDetails = it
-                isFailed.postValue(false)
+class DetailViewModel @ViewModelInject constructor(
+    private val repository: Repository,
+    private val dispatcher: DispatcherProvider
+) : ViewModel() {
+
+    private val _detailResponse = MutableStateFlow<DetailsEvent>(DetailsEvent.Empty)
+    val detailResponse: StateFlow<DetailsEvent> = _detailResponse
+
+    sealed class DetailsEvent {
+        class Success(val response: DetailsData) : DetailsEvent()
+        class Failure(val errorText: String) : DetailsEvent()
+        object Loading : DetailsEvent()
+        object Empty : DetailsEvent()
+    }
+
+     fun getData(id: String) {
+        viewModelScope.launch(dispatcher.io) {
+            _detailResponse.value = DetailsEvent.Loading
+            when (val response = repository.getMovie(id)) {
+                is Resource.Error -> {
+                    _detailResponse.value = DetailsEvent.Failure(response.message.toString())
+                }
+                is Resource.Success -> {
+                    response.data?.let {
+                        _detailResponse.value = DetailsEvent.Success(response = response.data)
+                    }
+                }
             }
-        } catch (e: UnknownHostException) {
-			//ловим отсутсвие интернета
-            isFailed.postValue(true)
         }
     }
 }
