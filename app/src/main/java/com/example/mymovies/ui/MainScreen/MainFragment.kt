@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.size.Scale
@@ -21,6 +22,7 @@ import com.example.mymovies.data.Constants
 import com.example.mymovies.data.Constants.EMPTY_SEARCH_WARNING
 import com.example.mymovies.data.Constants.EMPTY_STRING
 import com.example.mymovies.databinding.MainFragmentBinding
+import com.example.mymovies.ui.adapters.PagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.new_list.*
@@ -38,6 +40,8 @@ class MainFragment : Fragment() {
     private lateinit var waitingAnimation: WaitingAnimation
     private lateinit var binding: MainFragmentBinding
     private val hiltViewModel: SearcherViewModel by viewModels()
+
+    lateinit var pagingAdapter: PagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +85,7 @@ class MainFragment : Fragment() {
                     }
                     is SearcherViewModel.SearchEvent.Success -> {
                         hiltViewModel.isLoading = View.GONE
-                        recyclerview.adapter = MovieAdapter(it.response.movies)
+                        // recyclerview.adapter = PagingAdapter()
                         waitingAnimation.turnOffAnimation()
                         hiltViewModel.isClickable = true
                     }
@@ -103,10 +107,34 @@ class MainFragment : Fragment() {
                 2 -> Constants.TypeOfSearch.SERIES
                 else -> Constants.TypeOfSearch.ALL_TYPES
             }
+            pagingAdapter = PagingAdapter()
             hiltViewModel.searchSetup.search = input_text.text.toString()
-            hiltViewModel.searchMovies(hiltViewModel.searchSetup)
-            disablingUI()
-
+            recyclerview.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = pagingAdapter
+                lifecycleScope.launch {
+                    hiltViewModel.getPagingMovies(hiltViewModel.searchSetup).collect {
+                        pagingAdapter.submitData(it)
+                    }
+                }
+            }
+            /*
+                if (input_text.text.toString() == EMPTY_STRING) {
+                    Toast.makeText(it.context, EMPTY_SEARCH_WARNING, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (editTextYear.text.toString() != EMPTY_STRING)
+                    hiltViewModel.searchSetup.year = editTextYear.text.toString()
+                hiltViewModel.searchSetup.type = when (hiltViewModel.spinnerPosition) {
+                    0 -> Constants.TypeOfSearch.ALL_TYPES
+                    1 -> Constants.TypeOfSearch.MOVIES
+                    2 -> Constants.TypeOfSearch.SERIES
+                    else -> Constants.TypeOfSearch.ALL_TYPES
+                }
+                hiltViewModel.searchSetup.search = input_text.text.toString()
+                hiltViewModel.searchMovies(hiltViewModel.searchSetup)
+                disablingUI()
+    */
         }
     }
 
