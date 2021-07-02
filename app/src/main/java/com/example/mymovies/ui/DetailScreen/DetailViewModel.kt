@@ -4,10 +4,10 @@ package com.example.mymovies.ui.DetailScreen
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mymovies.repository.Repository
+import com.example.mymovies.data.repository.Repository
 import com.example.mymovies.util.DispatcherProvider
 import com.example.mymovies.util.Resource
-import com.example.test_movies.da.DetailsData
+import com.example.mymovies.models.DetailsData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

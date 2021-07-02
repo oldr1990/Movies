@@ -16,7 +16,7 @@ import coil.size.Scale
 import coil.size.Size
 import coil.transform.Transformation
 import com.example.mymovies.R
-import com.example.test_movies.da.Movie
+import com.example.mymovies.models.Movie
 import kotlinx.android.synthetic.main.new_list.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

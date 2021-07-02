@@ -1,4 +1,6 @@
-package com.example.mymovies.data
+package com.example.mymovies.models
+
+import com.example.mymovies.data.Constants
 
 data class Search(
     var search: String,

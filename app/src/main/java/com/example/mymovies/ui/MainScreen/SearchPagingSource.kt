@@ -2,9 +2,9 @@ package com.example.mymovies.ui.MainScreen
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.mymovies.data.Search
+import com.example.mymovies.models.Search
 import com.example.mymovies.interfaces.OmdbAPI
-import com.example.test_movies.da.Movie
+import com.example.mymovies.models.Movie
 
 class SearchPagingSource(
     private val search: Search,
@@ -21,11 +21,11 @@ class SearchPagingSource(
             responseData.addAll(data)
             val prevKey  = if (pageIndex == 1) null else pageIndex - 1
             LoadResult.Page(responseData, prevKey = prevKey, pageIndex.plus(1))
-
         } catch (e:Exception){
             LoadResult.Error(e)
         }
     }
+
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return state.anchorPosition?.let { anchorPosition ->

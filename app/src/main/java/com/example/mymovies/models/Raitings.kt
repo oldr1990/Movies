@@ -1,4 +1,4 @@
-package com.example.mymovies.data
+package com.example.mymovies.models
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

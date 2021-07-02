@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.mymovies.R
-import com.example.mymovies.data.Ratings
+import com.example.mymovies.models.Ratings
 import kotlinx.android.synthetic.main.rating_list_item_imbd.view.*
 import kotlinx.android.synthetic.main.rating_list_item_metacritic.view.*
 import kotlinx.android.synthetic.main.rating_list_item_rootten.view.*

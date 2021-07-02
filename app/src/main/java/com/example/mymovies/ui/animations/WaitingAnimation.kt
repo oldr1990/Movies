@@ -1,4 +1,4 @@
-package com.example.mymovies.animations
+package com.example.mymovies.ui.animations
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator

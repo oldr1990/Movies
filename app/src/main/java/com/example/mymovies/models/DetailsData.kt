@@ -1,8 +1,6 @@
-package com.example.test_movies.da
+package com.example.mymovies.models
 
 import android.os.Parcelable
-import androidx.lifecycle.MutableLiveData
-import com.example.mymovies.data.Ratings
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 

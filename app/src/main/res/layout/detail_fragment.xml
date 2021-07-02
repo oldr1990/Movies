@@ -8,8 +8,7 @@
 
         <variable
             name="movie"
-            type="com.example.test_movies.da.DetailsData" />
-
+            type="com.example.mymovies.models.DetailsData" />
 
     </data>
 

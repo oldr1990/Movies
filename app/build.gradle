@@ -18,12 +18,11 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
         viewBinding true
-        dataBinding true
+
     }
     buildTypes {
         release {
@@ -41,6 +40,8 @@ android {
 }
 
 dependencies {
+
+
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:3.0.0"
 
@@ -92,4 +93,5 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
 }

@@ -2,8 +2,8 @@ package com.example.mymovies.di
 
 import com.example.mymovies.data.Constants.BASE_URL
 import com.example.mymovies.interfaces.OmdbAPI
-import com.example.mymovies.repository.DefaultRepository
-import com.example.mymovies.repository.Repository
+import com.example.mymovies.data.repository.DefaultRepository
+import com.example.mymovies.data.repository.Repository
 import com.example.mymovies.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
@@ -40,7 +40,8 @@ object MovieModule {
 
     @Singleton
     @Provides
-    fun provideRepository(api: OmdbAPI): Repository = DefaultRepository(api)
+    fun provideRepository(api: OmdbAPI): Repository =
+        DefaultRepository(api)
 
     @Singleton
     @Provides

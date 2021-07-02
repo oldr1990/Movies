@@ -6,6 +6,8 @@ object Constants {
      const val EMPTY_STRING = ""
      const val EMPTY_SEARCH_WARNING = "Строка поиска не должна быть пустой!"
 
+     const val ROOM_DB_VERSION = 1
+
      object TypeOfSearch{
            val ALL_TYPES = null
           const val MOVIES = "movie"

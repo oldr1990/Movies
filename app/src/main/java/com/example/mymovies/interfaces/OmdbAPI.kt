@@ -1,7 +1,7 @@
 package com.example.mymovies.interfaces
 
-import com.example.test_movies.da.DetailsData
-import com.example.test_movies.da.MovieResponse
+import com.example.mymovies.models.DetailsData
+import com.example.mymovies.models.MovieResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

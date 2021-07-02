@@ -1,6 +1,5 @@
 package com.example.mymovies.ui.MainScreen
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,24 +12,30 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.size.Scale
-import com.example.mymovies.ui.adapters.MovieAdapter
 import com.example.mymovies.R
-import com.example.mymovies.animations.WaitingAnimation
+import com.example.mymovies.ui.animations.WaitingAnimation
 import com.example.mymovies.data.Constants
 import com.example.mymovies.data.Constants.EMPTY_SEARCH_WARNING
 import com.example.mymovies.data.Constants.EMPTY_STRING
 import com.example.mymovies.databinding.MainFragmentBinding
 import com.example.mymovies.ui.adapters.PagingAdapter
+import com.example.mymovies.util.DispatcherProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.new_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
+import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
@@ -42,46 +47,65 @@ class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
     private val hiltViewModel: SearcherViewModel by viewModels()
 
-    lateinit var pagingAdapter: PagingAdapter
+
+    private lateinit var pagingAdapter: PagingAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         return binding.root
     }
 
 
-    @SuppressLint("ResourceType", "SetTextI18n", "ShowToast")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         backgroundImageMain.load(R.drawable.movie_info_searcher) {
             scale(Scale.FILL)
         }
-
+        //Initialisation
         pagingAdapter = PagingAdapter()
         recyclerview.adapter = pagingAdapter
-        binding.isLoading = hiltViewModel.isLoading
         waitingAnimation = WaitingAnimation(imageViewWaiting, cardViewWaitingAnimation)
         spinnerSetup()
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-        binding.isClickable = hiltViewModel.isClickable
-        binding.isLoading = hiltViewModel.isLoading
-
-            hiltViewModel.pagingFlow?.let {
-                CoroutineScope(Dispatchers.IO).launch {
-                    it.collect {
-                        pagingAdapter.submitData(it)
-                    }
+        binding.isClickable = true
+        //Show data if we have it
+        hiltViewModel.pagingFlow?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                it.collect {
+                    pagingAdapter.submitData(it)
                 }
             }
+        }
+        //Loading state collect
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {  pagingAdapter.loadStateFlow.collectLatest { state->
 
+                    when (state.refresh) {
+                        is LoadState.NotLoading -> {
+                            waitingAnimation.turnOffAnimation()
+                        }
+                        LoadState.Loading -> {
+                            waitingAnimation.turnOnAnimation()
+                        }
+                        is LoadState.Error -> {
+                            waitingAnimation.turnOffAnimation()
 
+                        }
+                    }
+                }
 
-        search_button.setOnClickListener {
+            } catch (e: Exception){
+                Log.i("!@#", e.message?:"Error")
+            }
+
+        }
+        // Search button on click listener
+        search_button.setOnClickListener { view ->
             if (input_text.text.toString() == EMPTY_STRING) {
-                Toast.makeText(it.context, EMPTY_SEARCH_WARNING, Toast.LENGTH_SHORT).show()
+                Toast.makeText(view.context, EMPTY_SEARCH_WARNING, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             if (editTextYear.text.toString() != EMPTY_STRING)
@@ -94,14 +118,11 @@ class MainFragment : Fragment() {
             }
             hiltViewModel.searchSetup.search = input_text.text.toString()
             recyclerview.apply {
-                lifecycleScope.launch {
+                lifecycleScope.launch(Dispatchers.IO) {
                     hiltViewModel.initPaging(hiltViewModel.searchSetup)
-                    hiltViewModel.pagingFlow?.collect{
-                        pagingAdapter.submitData(it)
+                    hiltViewModel.pagingFlow?.collect {data->
+                        pagingAdapter.submitData(data)
                     }
-                    //hiltViewModel.getPagingMovies(hiltViewModel.searchSetup).collect {
-                     //   pagingAdapter.submitData(it)
-                    //}
                 }
             }
 
@@ -109,7 +130,6 @@ class MainFragment : Fragment() {
     }
 
 
-    //выпадающий список фильтра типа
     private fun spinnerSetup() {
         search_type_spinner.setSelection(hiltViewModel.spinnerPosition)
         val types = resources.getStringArray(R.array.type)

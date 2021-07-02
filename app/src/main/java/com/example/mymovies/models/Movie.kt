@@ -1,4 +1,4 @@
-package com.example.test_movies.da
+package com.example.mymovies.models
 
 
 import android.os.Parcelable
@@ -18,7 +18,6 @@ data class Movie(
     @SerializedName("imdbID")
     val imbdID: String = "",
     var colorBackground : Int = 0,
-    var colorTextBackground : Int = 0,
+   var colorTextBackground : Int = 0,
     var colorText: Int = 0,
-
 ) : Parcelable
