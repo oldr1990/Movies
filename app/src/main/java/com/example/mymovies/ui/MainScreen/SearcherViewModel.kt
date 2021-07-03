@@ -24,6 +24,7 @@ class SearcherViewModel @ViewModelInject constructor(
 
     fun initPaging(search: Search) {
         viewModelScope.launch(dispatcher.default) {
+            if (search.search != EMPTY_STRING)
             pagingFlow = repository.searchMovies(search).cachedIn(viewModelScope)
         }
     }

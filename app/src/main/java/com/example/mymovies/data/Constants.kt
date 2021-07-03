@@ -5,8 +5,7 @@ object Constants {
      const val ERROR_UNKNOWN = "Неизвестная ошибка!"
      const val EMPTY_STRING = ""
      const val EMPTY_SEARCH_WARNING = "Строка поиска не должна быть пустой!"
-
-     const val ROOM_DB_VERSION = 1
+     const val BACK_PRESSED_MESSAGE = "Для выхода нажмите назад еще раз"
 
      object TypeOfSearch{
            val ALL_TYPES = null
