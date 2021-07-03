@@ -19,6 +19,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildFeatures {
         viewBinding true
@@ -114,5 +115,10 @@ dependencies {
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.33-beta'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.35.1'
     debugImplementation "androidx.fragment:fragment-testing:1.4.0-alpha04"
+
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestUtil 'androidx.test:orchestrator:1.4.0'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    androidTestImplementation 'com.androidx.support.test:runner:1.0.2'
 
 }

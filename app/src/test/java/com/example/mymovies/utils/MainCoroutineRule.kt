@@ -1,4 +1,4 @@
-package com.example.mymovies
+package com.example.mymovies.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

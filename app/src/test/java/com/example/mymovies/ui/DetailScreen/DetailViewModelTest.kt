@@ -1,7 +1,7 @@
 package com.example.mymovies.ui.DetailScreen
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.mymovies.MainCoroutineRule
+import com.example.mymovies.utils.MainCoroutineRule
 import com.example.mymovies.data.Constants.EMPTY_STRING
 import com.example.mymovies.utils.FakeDefaultRepository
 import com.example.mymovies.utils.TestDispatcherProvider
