@@ -46,8 +46,6 @@ class MainFragment : Fragment() {
     private lateinit var waitingAnimation: WaitingAnimation
     private lateinit var binding: MainFragmentBinding
     private val hiltViewModel: SearcherViewModel by viewModels()
-
-
     private lateinit var pagingAdapter: PagingAdapter
 
     override fun onCreateView(
@@ -57,8 +55,6 @@ class MainFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
         return binding.root
     }
-
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         backgroundImageMain.load(R.drawable.movie_info_searcher) {
