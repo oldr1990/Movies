@@ -39,11 +39,6 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun myTest() = runBlockingTest {
-        assertThat(false).isFalse()
-    }
-
-    @Test
     fun getDetailsDataWithEmptyIDError() = runBlockingTest {
         var answer = false
         runBlocking {

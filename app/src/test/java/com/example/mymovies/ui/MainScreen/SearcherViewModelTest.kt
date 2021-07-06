@@ -21,7 +21,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
-
 class SearcherViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
