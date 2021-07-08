@@ -6,7 +6,8 @@ This app can search movis and series by name, year, type(all, movie, series).Eve
 the poster of it (background and text). You can get a more details by click specific item and check raiting and some specific  
 details of that movie or series.  
 ____  
-_Это приложение может искать видео и сериалы по названию фильтруя по годам и/или типу (все, фильм, сериал).  
+_Это приложение может искать фильмы и сериалы по названию фильтруя по годам и/или типу (все, фильм, сериал). 
+#### Стек:  __Tests, MVVM, Dagger Hilt,  Coroutines Flow, Retrofit, OkHTTP, Navigation, Paging, OMDb API__
 Каждый элемент поиска окрашен в цвет в зависимости от его плаката (фон и текст). Вы можете получить более подробную информацию,  
 щелкнув конкретный элемент и посмотреть рейтинг и некоторые конкретные детали этого фильма или сериала._
 ____  
