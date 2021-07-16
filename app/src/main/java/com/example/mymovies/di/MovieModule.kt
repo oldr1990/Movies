@@ -1,7 +1,7 @@
 package com.example.mymovies.di
 
 import com.example.mymovies.data.Constants.BASE_URL
-import com.example.mymovies.interfaces.OmdbAPI
+import com.example.mymovies.di.interfaces.OmdbAPI
 import com.example.mymovies.data.repository.DefaultRepository
 import com.example.mymovies.data.repository.Repository
 import com.example.mymovies.util.DispatcherProvider

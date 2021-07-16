@@ -6,7 +6,7 @@ import android.view.Window
 import android.widget.Toast
 import com.example.mymovies.data.Constants.BACK_PRESSED_MESSAGE
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.system.exitProcess
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(System.currentTimeMillis() - backPressedTimer < 2000)
-            exitProcess(-1)
+            super.onBackPressed()
         else {
             backPressedTimer = System.currentTimeMillis()
             Toast.makeText(this, BACK_PRESSED_MESSAGE,Toast.LENGTH_SHORT).show()

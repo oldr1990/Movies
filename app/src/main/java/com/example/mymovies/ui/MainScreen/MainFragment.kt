@@ -1,7 +1,6 @@
 package com.example.mymovies.ui.MainScreen
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -23,28 +21,24 @@ import com.example.mymovies.data.Constants.EMPTY_SEARCH_WARNING
 import com.example.mymovies.data.Constants.EMPTY_STRING
 import com.example.mymovies.databinding.MainFragmentBinding
 import com.example.mymovies.ui.adapters.PagingAdapter
-import com.example.mymovies.util.DispatcherProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.new_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import java.lang.Exception
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
     }
-
     private lateinit var waitingAnimation: WaitingAnimation
     private lateinit var binding: MainFragmentBinding
+    private val _binding get() = binding
     private val hiltViewModel: SearcherViewModel by viewModels()
     private lateinit var pagingAdapter: PagingAdapter
 
@@ -52,8 +46,9 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.main_fragment, container, false)
-        return binding.root
+        binding = MainFragmentBinding.inflate(inflater, container, false)
+        return _binding.root
+
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -66,8 +61,7 @@ class MainFragment : Fragment() {
         waitingAnimation = WaitingAnimation(imageViewWaiting, cardViewWaitingAnimation)
         spinnerSetup()
         recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-        binding.isClickable = true
-        //Show data if we have it
+        _binding.searchButton.isClickable = !hiltViewModel.isLoading
         hiltViewModel.pagingFlow?.let {
             CoroutineScope(Dispatchers.IO).launch {
                 it.collect {
@@ -78,23 +72,24 @@ class MainFragment : Fragment() {
         //Loading state collect
         viewLifecycleOwner.lifecycleScope.launch {
             try {  pagingAdapter.loadStateFlow.collectLatest { state->
-
                     when (state.refresh) {
                         is LoadState.NotLoading -> {
+                            hiltViewModel.isLoading = false
                             waitingAnimation.turnOffAnimation()
                         }
                         LoadState.Loading -> {
+                            hiltViewModel.isLoading = false
                             waitingAnimation.turnOnAnimation()
                         }
                         is LoadState.Error -> {
+                            hiltViewModel.isLoading = false
                             waitingAnimation.turnOffAnimation()
-
                         }
                     }
                 }
 
             } catch (e: Exception){
-                Log.i("!@#", e.message?:"Error")
+                Toast.makeText(requireContext(),  e.message?:"Error", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -124,7 +119,6 @@ class MainFragment : Fragment() {
 
         }
     }
-
 
     private fun spinnerSetup() {
         search_type_spinner.setSelection(hiltViewModel.spinnerPosition)

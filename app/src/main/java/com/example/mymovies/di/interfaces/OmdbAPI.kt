@@ -1,4 +1,4 @@
-package com.example.mymovies.interfaces
+package com.example.mymovies.di.interfaces
 
 import com.example.mymovies.models.DetailsData
 import com.example.mymovies.models.MovieResponse

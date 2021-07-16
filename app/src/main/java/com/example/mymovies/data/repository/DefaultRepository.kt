@@ -6,7 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.mymovies.data.Constants.ERROR_UNKNOWN
 import com.example.mymovies.models.Search
-import com.example.mymovies.interfaces.OmdbAPI
+import com.example.mymovies.di.interfaces.OmdbAPI
 import com.example.mymovies.util.Resource
 import com.example.mymovies.models.DetailsData
 import com.example.mymovies.models.Movie

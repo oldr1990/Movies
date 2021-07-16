@@ -3,7 +3,7 @@ package com.example.mymovies.ui.MainScreen
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.mymovies.models.Search
-import com.example.mymovies.interfaces.OmdbAPI
+import com.example.mymovies.di.interfaces.OmdbAPI
 import com.example.mymovies.models.Movie
 
 class SearchPagingSource(

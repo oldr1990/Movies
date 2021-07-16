@@ -52,7 +52,7 @@ class PagingAdapter : PagingDataAdapter<Movie, PagingAdapter.ViewHolder>(MovieDe
         val job = GlobalScope.launch {
             holder.itemView.imageView.load(item.imgURL) {
                 error(R.drawable.sorry_no_image_availble)
-                scale(Scale.FILL)
+                scale(Scale.FIT)
                 crossfade(true)
                 crossfade(500)
                 transformations(object : Transformation {
@@ -67,19 +67,9 @@ class PagingAdapter : PagingDataAdapter<Movie, PagingAdapter.ViewHolder>(MovieDe
                             item.colorBackground =
                                 p.vibrantSwatch!!.rgb
                         }
-                        if (p.darkVibrantSwatch != null) {
-                            item.colorText =
-                                p.darkVibrantSwatch!!.rgb
-                        }
-
                         if (item.colorBackground != 0) holder.itemView.cardViewListItem.setCardBackgroundColor(
                             item.colorBackground
                         )
-                        if (item.colorText != 0) {
-                            holder.itemView.titleText.setTextColor(item.colorText)
-                            holder.itemView.typeText.setTextColor(item.colorText)
-                            holder.itemView.yearText.setTextColor(item.colorText)
-                        }
                         return input
                     }
                 })
