@@ -15,6 +15,7 @@
     <color name="light_gray">#DFE1DF</color>
     <color name="gray">#656565</color>
     <color name="waiting_background">#8AFFFFFF</color>
-    <color name="transparent">#00FFFFFF</color>
+    <color name="transparent">#400C0606</color>
+    <color name="transparent_white">#40FAF6F6</color>
 
 </resources>

@@ -52,7 +52,7 @@ class PagingAdapter : PagingDataAdapter<Movie, PagingAdapter.ViewHolder>(MovieDe
         val job = GlobalScope.launch {
             holder.itemView.imageView.load(item.imgURL) {
                 error(R.drawable.sorry_no_image_availble)
-                scale(Scale.FIT)
+                scale(Scale.FILL)
                 crossfade(true)
                 crossfade(500)
                 transformations(object : Transformation {
